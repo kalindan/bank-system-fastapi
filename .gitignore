@@ -1,6 +1,5 @@
 __pycache__/app.cpython-310.pyc
 __pycache__/main.cpython-310.pyc
-README.md
 venv/pyvenv.cfg
 venv/Lib/site-packages/d9e93640ccdc3fbe1e95__mypyc.cp310-win_amd64.pyd
 venv/Lib/site-packages/distutils-precedence.pth
@@ -3489,3 +3488,5 @@ venv/Scripts/pythonw.exe
 venv/Scripts/stubgen.exe
 venv/Scripts/stubtest.exe
 venv/Scripts/uvicorn.exe
+venv/Lib/site-packages/mypyc/README.md
+venv/Lib/site-packages/mypyc/external/googletest/README.md
