@@ -8,7 +8,6 @@ The goal of this project is to create simple REST API service mimicing simple ba
 - Set daily withdrawal limits
 - Set maximum per withdrawal limit
 ## Backend requirements:
-<<<<<<< HEAD
 - [ ] Store persistent data in database
 - [ ] Authentication of customers
   1. [ ] In first step by username and password
@@ -16,15 +15,6 @@ The goal of this project is to create simple REST API service mimicing simple ba
 - [ ] Validation of limits
 - [ ] Generate IDs for newly created customers and their accounts
 - [ ] Bonus: Log all account transactions
-=======
-- Store persistent data in database [ ] 
-- Authentication of customers [ ] 
-  1. In first step by username and password [ ] 
-  2. In second step by token [ ]
-- Validation of limits [ ]
-- Generate IDs for newly created customers and their accounts [ ]
-- Bonus: Log all account transactions [ ]
->>>>>>> 0d4f69bec2fe5363f8b7c9f7ed5ac9f88afdc3bf
 ## Used technologies:
 - Python
 - FastAPI
