@@ -22,15 +22,15 @@ The goal of this project is to create simple REST API service mimicing simple ba
 - PostgreSQL
 
 ## Bank system API endpoints
-|URL                                                                            | HTTP method |
-|---------------------------------------------                                  |-------------|
-|http://127.0.0.1:8000/customer                                                 |POST         |
-|http://127.0.0.1:8000/customer/{customer_id}                                   |GET, DELETE  |
-|http://127.0.0.1:8000/customer/{customer_id}/account                           |POST         |
-|http://127.0.0.1:8000/customer/{customer_id}/account/{account_id}              |GET, DELETE  |
-|http://127.0.0.1:8000/customer/{customer_id}/account/{account_id}/limits       |GET, POST    |
-|http://127.0.0.1:8000/customer/{customer_id}/account/{account_id}/transfer     |PUT          |
-|http://127.0.0.1:8000/customer/{customer_id}/account/{account_id}/withdrawal   |PUT          |
-|http://127.0.0.1:8000/customer/{customer_id}/account/{account_id}/deposit      |PUT          |
+| URL                                                                             | HTTP method | Description                               |
+|---------------------------------------------------------------------------------|-------------|-------------------------------------------|
+|http://127.0.0.1:8000/customers                                                  |POST         | Register new customer                     |
+|http://127.0.0.1:8000/customers/{customer_id}                                    |GET, DELETE  | Get customers info / Delete customer      |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts                           |POST         | Register new account                      |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts/{account_id}              |GET, DELETE  | Get account info / Delete account         |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts/{account_id}/limits       |GET, POST    | Set / get account daily/max amount limits |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts/{account_id}/transfer     |PUT          | Transfer money to different account       |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts/{account_id}/withdrawal   |PUT          | Withdraw money from account               |
+|http://127.0.0.1:8000/customers/{customer_id}/accounts/{account_id}/deposit      |PUT          | Deposit money to account                  |
 
 
