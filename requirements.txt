@@ -17,7 +17,7 @@ platformdirs==2.5.2
 pycparser==2.21
 pydantic==1.9.1
 sniffio==1.2.0
-SQLAlchemy==1.4.37
+SQLAlchemy==1.4.35
 sqlalchemy2-stubs==0.0.2a23
 sqlmodel==0.0.6
 starlette==0.19.1

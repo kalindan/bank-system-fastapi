@@ -6,7 +6,6 @@ class Customer(BaseModel):
     
 class Account(BaseModel):
     number:int
-    pin_code:int
     balance:float
 
 class Limits(BaseModel):

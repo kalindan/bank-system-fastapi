@@ -1,5 +1,5 @@
 # Bank system
-The goal of this project is to create simple REST API service mimicing simple bank system.
+The goal of this project is to create REST API service mimicing simple bank system.
 ## User requirements:
 - Possibility to register customer
 - Possibility to create an account(s) for given customer
@@ -22,15 +22,16 @@ The goal of this project is to create simple REST API service mimicing simple ba
 - PostgreSQL
 
 ## Bank system API endpoints
-| Endpoints                                                   | HTTP method | Description                               |
-|-------------------------------------------------------------|-------------|-------------------------------------------|
-| /customers                                                  |POST         | Register new customer                     |
-| /customers/{customer_id}                                    |GET, DELETE  | Get customers info / Delete customer      |
-| /customers/{customer_id}/accounts                           |POST         | Register new account                      |
-| /customers/{customer_id}/accounts/{account_id}              |GET, DELETE  | Get account info / Delete account         |
-| /customers/{customer_id}/accounts/{account_id}/limits       |GET, POST    | Set / get account daily/max amount limits |
-| /customers/{customer_id}/accounts/{account_id}/transfer     |PUT          | Transfer money to different account       |
-| /customers/{customer_id}/accounts/{account_id}/withdrawal   |PUT          | Withdraw money from account               |
-| /customers/{customer_id}/accounts/{account_id}/deposit      |PUT          | Deposit money to account                  |
-
+| Endpoints                          | HTTP method      | Description                                |
+|------------------------------------|------------------|--------------------------------------------|
+| /customers                         |POST              | Register new customer                      |
+| /customers/{customer_id}           |GET, POST, DELETE | Get / Login / Delete customer              |      |
+| /customers/{customer_id}/recover   |GET               | Recover password (Send to email)           |
+| /accounts                          |POST              | Register new account                       |
+| /accounts/{account_id}             |GET, DELETE       | Get account info / Delete account          |
+| /accounts/{account_id}/limits      |GET, POST         | Set / get account daily/max amount limits  |
+| /accounts/{account_id}/transfer    |PUT               | Transfer money to different account        |
+| /accounts/{account_id}/withdrawal  |PUT               | Withdraw money from account                |
+| /accounts/{account_id}/deposit     |PUT               | Deposit money to account                   |
+     
 

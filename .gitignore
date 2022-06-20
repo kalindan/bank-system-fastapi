@@ -5081,3 +5081,11 @@ application/__pycache__/database.cpython-310.pyc
 application/__pycache__/models.cpython-310.pyc
 application/__pycache__/utils.cpython-310.pyc
 database.db
+application/api.py
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/INSTALLER
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/LICENSE
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/METADATA
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/RECORD
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/REQUESTED
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/top_level.txt
+venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/WHEEL
