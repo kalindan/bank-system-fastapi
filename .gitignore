@@ -5089,3 +5089,8 @@ venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/RECORD
 venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/REQUESTED
 venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/top_level.txt
 venv/Lib/site-packages/SQLAlchemy-1.4.35.dist-info/WHEEL
+application/__pycache__/schemas.cpython-310.pyc
+venv/Lib/site-packages/cffi-1.15.0.dist-info/REQUESTED
+venv/Lib/site-packages/pathspec-0.9.0.dist-info/REQUESTED
+venv/Lib/site-packages/platformdirs-2.5.2.dist-info/REQUESTED
+venv/Lib/site-packages/pycparser-2.21.dist-info/REQUESTED
