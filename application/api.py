@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Body
+from fastapi import FastAPI, Depends, Body, HTTPException, status
 from .database import create_db_and_tables, get_session, Session
 from .models import Account, AccountRead, Customer, CustomerWrite, CustomerRead
 from .schemas import Limits
@@ -12,6 +12,9 @@ app = FastAPI()
 def on_startup():
     create_db_and_tables()
 
+@app.get("/")
+def index():
+    return {"message":"Welcome to K-bank system"}
 
 @app.post("/customers", response_model=CustomerRead)
 def register_customer(customer: CustomerWrite, session: Session = Depends(get_session)):
@@ -51,21 +54,24 @@ def get_account(account_id: int, session: Session = Depends(get_session)):
     return crud_account.read(session=session, account_id=account_id)
 
 
-@app.post("/accounts/{account_id}/limits")
+@app.put("/accounts/{account_id}/limits")
 def set_limits(account_id: int, limits: Limits, session: Session = Depends(get_session)):
     return crud_account.update_limits(session=session, account_id=account_id, limits=limits)
 
 
 @app.put("/accounts/{account_id}/withdrawal")
-def withdraw_money(account_id: int, amount: int = Body(), session: Session = Depends(get_session)):
+def withdraw_money(account_id: int, amount: float = Body(), session: Session = Depends(get_session)):
     account = crud_account.read(session=session, account_id=account_id)
-    # to do "if account.balance"
+    if account.balance < amount:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="Not sufficient balance")
+    crud_account.update_balance(session=session,account_id=account_id,amount=-amount)
+    return {"message": f"Here is your {amount} CZK"}
 
-
+# limits not applied, also to check withderawal, now adds money
 @app.put("/accounts/{account_id}/deposit")
-def deposit_money(account_id: int, amount: int = Body(), session: Session = Depends(get_session)):
-    pass
-
+def deposit_money(account_id: int, amount: float = Body(), session: Session = Depends(get_session)):
+    crud_account.update_balance(session=session,account_id=account_id,amount=amount)
+    return {"message": f"{amount} CZK deposited to account {account_id}"}
 
 # @app.put("/accounts/{account_id}/transfer")
 # def transfer_money(account_id: int, account_to: Account, amount:int= Body()):

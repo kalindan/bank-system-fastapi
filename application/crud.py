@@ -49,11 +49,11 @@ class CRUDAccount:
         return account
 
     @staticmethod
-    def update_balance(session: Session, account_id: int, balance: float) -> Account:
+    def update_balance(session: Session, account_id: int, amount: float) -> Account:
         account = session.get(Account, account_id)
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
-        account.balance += balance
+        account.balance += amount
         session.add(account)
         session.commit()
         session.refresh(account)
