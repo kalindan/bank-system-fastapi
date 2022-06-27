@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import HTTPException
 from sqlmodel import select
 from app.models.transaction_model import TransactionType, Transaction
@@ -10,7 +11,7 @@ class CRUDTransaction():
         account = session.get(Account, account_id)
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
-        transaction = Transaction(amount=amount,transaction_type=transaction_type,account_id=account_id)
+        transaction = Transaction(amount=amount,transaction_type=transaction_type,account_id=account_id, date=datetime.now())
         session.add(transaction)
         session.commit()
         session.refresh(transaction)

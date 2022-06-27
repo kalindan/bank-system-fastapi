@@ -1,5 +1,5 @@
 from app.db import Session, crud_account, crud_transaction, get_session
-from app.models import AccountRead, Limits
+from app.models import AccountRead, Limits, TransactionWrite
 from app.models.transaction_model import TransactionType
 from app.utils import (check_amount_withdrawn, check_balance,
                        check_daily_withdrawals)
@@ -31,23 +31,23 @@ def set_limits(account_id: int, limits: Limits, session: Session = Depends(get_s
 
 
 @router.put("/{account_id}/withdrawal")
-def withdraw_money(account_id: int, amount: float = Body(), session: Session = Depends(get_session)):
+def withdraw_money(account_id: int, transaction: TransactionWrite, session: Session = Depends(get_session)):
     account = crud_account.read(session=session, account_id=account_id)
-    check_balance(account=account,amount=amount)
+    check_balance(account=account,amount=transaction.amount)
     transactions = crud_transaction.read_all(session=session, account_id=account_id)
     check_daily_withdrawals(account=account,transactions=transactions)
-    check_amount_withdrawn(account=account,amount=amount,transactions=transactions)
-    crud_account.update_balance(session=session,account_id=account_id,amount=-amount)
-    crud_transaction.create(session=session, account_id=account_id, transaction_type=TransactionType.WITHDRAWAL, amount=amount)
+    check_amount_withdrawn(account=account,amount=transaction.amount,transactions=transactions)
+    crud_account.update_balance(session=session,account_id=account_id,amount=-transaction.amount)
+    crud_transaction.create(session=session, account_id=account_id, transaction_type=TransactionType.WITHDRAWAL, amount=transaction.amount)
     return {"status":"success",
-            "message": f"Here is your {amount} CZK"}
+            "message": f"Here is your {transaction.amount} CZK"}
     
 @router.put("/{account_id}/deposit")
-def deposit_money(account_id: int, amount: float = Body(), session: Session = Depends(get_session)):
-    crud_account.update_balance(session=session,account_id=account_id,amount=amount)
-    crud_transaction.create(session=session, account_id=account_id, transaction_type=TransactionType.DEPOSIT, amount=amount)
+def deposit_money(account_id: int, transaction: TransactionWrite, session: Session = Depends(get_session)):
+    crud_account.update_balance(session=session,account_id=account_id,amount=transaction.amount)
+    crud_transaction.create(session=session, account_id=account_id, transaction_type=TransactionType.DEPOSIT, amount=transaction.amount)
     return {"status":"success",
-            "message": f"{amount} CZK deposited to account {account_id}"}
+            "message": f"{transaction.amount} CZK deposited to account {account_id}"}
 
 @router.put("/{account_id}/transfer")
 def transfer_money(account_id: int, session: Session = Depends(get_session)): #, account_to: Account, amount:int= Body()):
