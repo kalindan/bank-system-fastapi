@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from .database import Session
-from ..models import Account, Customer, Limits
+from app.models import Account, Customer, Limits
 
 class CRUDAccount:
     @staticmethod
@@ -33,7 +33,7 @@ class CRUDAccount:
         return account
 
     @staticmethod
-    def update_limits(session: Session, account_id: int, limits: Limits) -> Account:
+    def update_limits(session: Session, account_id: int, limits: Limits) -> dict:
         account = session.get(Account, account_id)
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
@@ -42,7 +42,10 @@ class CRUDAccount:
         session.add(account)
         session.commit()
         session.refresh(account)
-        return account
+        return {"status":"success",
+                "message": f"Account {account_id} limits successfully updated",
+                "daily_limit":account.daily_limit,
+                "num_of_withdrawals":account.num_of_withdrawals}
 
     @staticmethod
     def delete(session: Session, account_id: int) -> dict:
@@ -51,6 +54,7 @@ class CRUDAccount:
             raise HTTPException(status_code=404, detail="Account not found")
         session.delete(account)
         session.commit()
-        return {"message": f"Account {account_id} successfully deleted"}
+        return {"status":"success",
+                "message": f"Account {account_id} successfully deleted"}
 
 crud_account = CRUDAccount()

@@ -3,7 +3,6 @@ from .customer_model import CustomerBase
 from .transaction_model import TransactionBase, TransactionType
    
 class TransactionRead(TransactionBase):
-    id:int
     transaction_type: TransactionType
     
 class AccountRead(AccountBase):

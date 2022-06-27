@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from .database import Session
-from ..models import Customer
+from app.models import Customer
 
 class CRUDCustomer:
     @staticmethod
