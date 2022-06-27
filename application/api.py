@@ -1,12 +1,9 @@
 from fastapi import FastAPI, Depends, Body, HTTPException, status
-from .database import create_db_and_tables, get_session, Session
-from .models import Account, AccountRead, Customer, CustomerWrite, CustomerRead
-from .schemas import Limits
+from .db import create_db_and_tables, get_session, Session, crud_customer, crud_account
+from .models import  Account, Customer, CustomerWrite, TransactionRead, AccountRead, CustomerRead, Limits
 from .utils import get_password_hash
-from .crud import crud_customer, crud_account
 
 app = FastAPI()
-
 
 @app.on_event("startup")
 def on_startup():
@@ -14,7 +11,7 @@ def on_startup():
 
 @app.get("/")
 def index():
-    return {"message":"Welcome to K-bank system"}
+    return {"message":"Welcome to k-bank system"}
 
 @app.post("/customers", response_model=CustomerRead)
 def register_customer(customer: CustomerWrite, session: Session = Depends(get_session)):
@@ -54,7 +51,7 @@ def get_account(account_id: int, session: Session = Depends(get_session)):
     return crud_account.read(session=session, account_id=account_id)
 
 
-@app.put("/accounts/{account_id}/limits")
+@app.put("/accounts/{account_id}/limits",response_model=AccountRead)
 def set_limits(account_id: int, limits: Limits, session: Session = Depends(get_session)):
     return crud_account.update_limits(session=session, account_id=account_id, limits=limits)
 
@@ -64,6 +61,9 @@ def withdraw_money(account_id: int, amount: float = Body(), session: Session = D
     account = crud_account.read(session=session, account_id=account_id)
     if account.balance < amount:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="Not sufficient balance")
+    if account.daily_limit < amount:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="Desired amount over daily limit")
+    
     crud_account.update_balance(session=session,account_id=account_id,amount=-amount)
     return {"message": f"Here is your {amount} CZK"}
 
@@ -73,6 +73,6 @@ def deposit_money(account_id: int, amount: float = Body(), session: Session = De
     crud_account.update_balance(session=session,account_id=account_id,amount=amount)
     return {"message": f"{amount} CZK deposited to account {account_id}"}
 
-# @app.put("/accounts/{account_id}/transfer")
-# def transfer_money(account_id: int, account_to: Account, amount:int= Body()):
-#     pass
+@app.put("/accounts/{account_id}/transfer")
+def transfer_money(account_id: int, account_to: Account, amount:int= Body()):
+    pass
