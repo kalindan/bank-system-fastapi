@@ -1,4 +1,3 @@
-from this import s
 from fastapi import APIRouter, Depends
 from app.db import Session, get_session
 from app.models import AccountWrite, AccountRead, Limits, TransactionWrite, Transaction
