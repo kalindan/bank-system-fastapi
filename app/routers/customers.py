@@ -1,21 +1,27 @@
 from fastapi import APIRouter, Depends
-from app.db import get_session, Session, crud_customer
+from app.db import get_session, Session
 from app.models import  Customer, CustomerWrite, CustomerRead
-from app.utils import get_password_hash
 
 router = APIRouter(prefix="/customers",
                    tags=["customers"])
 
-@router.post("/", response_model=CustomerRead)
-def register_customer(customer: CustomerWrite, session: Session = Depends(get_session)):
-    db_customer = Customer.from_orm(customer)
-    db_customer.hashed_password = get_password_hash(customer.password)
-    return crud_customer.create(session=session, customer=db_customer)
+@router.post("/")
+def register_customer(customer_write: CustomerWrite, session: Session = Depends(get_session)):
+    customer_db = Customer.from_orm(customer_write)\
+                          .hash_password(customer_write.password)\
+                          .db_create(session=session)
+    customer_read = CustomerRead.from_orm(customer_db)
+    return {"status":"success",
+            "message": f"Customer {customer_read.id} successfully created",
+            "customer_info":customer_read}
 
 
-@router.get("/{customer_id}", response_model=CustomerRead)
+@router.get("/{customer_id}")
 def customer_info(customer_id: int, session: Session = Depends(get_session)):
-    return crud_customer.read(session=session, customer_id=customer_id)
+    customer = Customer(id=customer_id).db_read(session=session)
+    return {"status":"success",
+            "message": f"Customer {customer_id} successfully loaded",
+            "customer_info":customer}
 
 
 @router.post("/{customer_id}", response_model=CustomerRead)
@@ -25,4 +31,6 @@ def login_customer(customer_id: int, session: Session = Depends(get_session)):
 
 @router.delete("/{customer_id}")
 def delete_customer(customer_id: int, session: Session = Depends(get_session)):
-    return crud_customer.delete(session=session, customer_id=customer_id)
+    Customer(id=customer_id).db_delete(session=session)
+    return {"status":"success",
+            "message": f"Customer {customer_id} successfully deleted"}

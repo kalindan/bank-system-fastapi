@@ -9,6 +9,7 @@ class TransactionRead(TransactionBase):
     
 class AccountRead(AccountBase):
     id: int
+    balance: float
     transactions: list["TransactionRead"] = []
     
 class CustomerRead(CustomerBase):
