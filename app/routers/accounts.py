@@ -64,7 +64,7 @@ def withdraw_money(account_id: int, transaction: TransactionWrite, session: Sess
 def deposit_money(account_id: int, transaction: TransactionWrite, session: Session = Depends(get_session)):
     Account(id=account_id).db_update_balance(session=session,amount=transaction.amount)
     Transaction(account_id=account_id, 
-                transaction_type=TransactionType.WITHDRAWAL, 
+                transaction_type=TransactionType.DEPOSIT, 
                 amount=transaction.amount).db_create(session=session)
     return {"status":"success",
             "message": f"Successfully {transaction.amount} CZK deposited to account {account_id}"}
