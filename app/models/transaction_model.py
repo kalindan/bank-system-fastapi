@@ -6,16 +6,10 @@ from sqlmodel import Field, Relationship, SQLModel, Column, Enum
 from typing import TYPE_CHECKING
 from ..db import Session
 from .base_models import TransactionBase
-
+from .account_model import Account
+from .enums import  TransactionType
 if TYPE_CHECKING:
     from .account_model import Account
-
-
-class TransactionType(enum.Enum):
-    WITHDRAWAL = "withdrawal"
-    DEPOSIT = "deposit"
-    TRANSFER = "transfer"
-    NONE = "none"
 
 
 class Transaction(TransactionBase, table=True):

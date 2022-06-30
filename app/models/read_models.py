@@ -1,6 +1,9 @@
+from fastapi import status
 from datetime import datetime
+
+from sqlmodel import Field
 from .base_models import TransactionBase, AccountBase, CustomerBase
-from .transaction_model import TransactionType
+from .enums import TransactionType
 
 
 class TransactionRead(TransactionBase):
@@ -14,6 +17,16 @@ class AccountRead(AccountBase):
     transactions: list["TransactionRead"] = []
 
 
+class AccountResponse(AccountRead):
+    status: str = Field(default="")
+    message: str = Field(default="")
+
+
 class CustomerRead(CustomerBase):
     id: int
     accounts: list["AccountRead"] = []
+
+
+class CustomerResponse(CustomerBase):
+    status: str = Field(default="")
+    message: str = Field(default="")

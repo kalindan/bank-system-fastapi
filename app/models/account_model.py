@@ -1,11 +1,11 @@
 from datetime import datetime
 from fastapi import HTTPException, status
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship
 from typing import TYPE_CHECKING
 
-from app.models.read_models import AccountRead
+from app.models.read_models import AccountResponse
 from ..db import Session
-from ..models.transaction_model import TransactionType
+from .enums import TransactionType
 
 from .customer_model import Customer
 from .limits_model import Limits
@@ -25,7 +25,10 @@ class Account(AccountBase, table=True):
 
     def check_balance(self, amount: float):
         if self.balance < amount:
-            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Not sufficient balance")
+            raise HTTPException(
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail="Not sufficient balance",
+            )
         return self
 
     def check_daily_withdrawals(self):
@@ -33,11 +36,15 @@ class Account(AccountBase, table=True):
             [
                 transaction
                 for transaction in self.transactions
-                if transaction.date.date() == datetime.now().date() and transaction.transaction_type == TransactionType.WITHDRAWAL
+                if transaction.date.date() == datetime.now().date()
+                and transaction.transaction_type == TransactionType.WITHDRAWAL
             ]
         )
         if self.num_of_withdrawals <= withdrawals_today:
-            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="No more allowed withdrawals today")
+            raise HTTPException(
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail="No more allowed withdrawals today",
+            )
         return self
 
     def check_amount_withdrawn(self, amount: float):
@@ -45,19 +52,26 @@ class Account(AccountBase, table=True):
             [
                 transaction.amount
                 for transaction in self.transactions
-                if transaction.date.date() == datetime.now().date() and transaction.transaction_type == TransactionType.WITHDRAWAL
+                if transaction.date.date() == datetime.now().date()
+                and transaction.transaction_type == TransactionType.WITHDRAWAL
             ]
         )
         if amount > self.daily_limit - withdrawn_today:
-            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Desired amount over allowed daily limit")
+            raise HTTPException(
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail="Desired amount over allowed daily limit",
+            )
         return self
 
     def set_customer_id(self, id: int):
         self.customer_id = id
         return self
 
-    def get_read_model(self):
-        return AccountRead.from_orm(self)
+    def get_response_model(self, status: str, message: str):
+        account_response = AccountResponse.from_orm(self)
+        account_response.status = status
+        account_response.message = message
+        return account_response
 
     def db_create(self, session: Session):
         customer = session.get(Customer, self.customer_id)

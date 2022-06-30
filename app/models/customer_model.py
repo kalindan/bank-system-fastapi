@@ -1,9 +1,8 @@
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship
 from typing import TYPE_CHECKING
-from pydantic import EmailStr
 from fastapi import HTTPException
 from passlib.context import CryptContext  # type:ignore
-from ..models.read_models import CustomerRead
+from ..models.read_models import CustomerRead, CustomerResponse
 from ..db import Session
 from .base_models import CustomerBase
 
@@ -29,8 +28,11 @@ class Customer(CustomerBase, table=True):
         self.hashed_password = pwd_context.hash(password)
         return self
 
-    def get_read_model(self):
-        return CustomerRead.from_orm(self)
+    def get_response_model(self, status: str, message: str):
+        customer_response = CustomerResponse.from_orm(self)
+        customer_response.status = status
+        customer_response.message = message
+        return customer_response
 
     def db_create(self, session: Session):
         session.add(self)
