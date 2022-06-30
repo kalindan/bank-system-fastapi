@@ -1,32 +1,36 @@
 from sqlmodel import Field, Relationship, SQLModel
+from typing import TYPE_CHECKING
 from pydantic import EmailStr
 from fastapi import HTTPException
-from passlib.context import CryptContext #type:ignore
+from passlib.context import CryptContext  # type:ignore
+from ..models.read_models import CustomerRead
 from ..db import Session
-from typing import TYPE_CHECKING
+from .base_models import CustomerBase
+
 if TYPE_CHECKING:
     from .account_model import Account
 
 pwd_context = CryptContext(schemes=["bcrypt"])
 
-class CustomerBase(SQLModel):
-    name: str = Field()
-    email: EmailStr = Field()
-    
+
 class CustomerWrite(CustomerBase):
     password: str = Field(min_length=10)
+
 
 class Customer(CustomerBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str = Field(default=None)
     accounts: list["Account"] = Relationship(back_populates="customer")
 
-    def verify_password(self, password:str) -> bool:
+    def verify_password(self, password: str) -> bool:
         return pwd_context.verify(password, self.hashed_password)
-    
-    def hash_password(self,password:str):
-        self.hashed_password=pwd_context.hash(password)
+
+    def hash_password(self, password: str):
+        self.hashed_password = pwd_context.hash(password)
         return self
+
+    def get_read_model(self):
+        return CustomerRead.from_orm(self)
 
     def db_create(self, session: Session):
         session.add(self)
@@ -47,4 +51,4 @@ class Customer(CustomerBase, table=True):
             raise HTTPException(status_code=404, detail="Customer not found")
         session.delete(customer)
         session.commit()
-        return 
+        return
