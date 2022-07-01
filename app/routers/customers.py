@@ -16,7 +16,7 @@ def register_customer(
 ):
     customer = (
         Customer.from_orm(customer_write)
-        .db_check_by_email(session=session)
+        .db_check_if_exists(session=session)
         .hash_password(customer_write.password)
         .db_create(session=session)
         .get_response_model(

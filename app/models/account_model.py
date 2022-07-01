@@ -1,11 +1,12 @@
 from datetime import datetime
-from fastapi import HTTPException, status
+from fastapi import Depends, HTTPException, status
 from sqlmodel import Field, Relationship
 from typing import TYPE_CHECKING
+from app.db.database import get_session
 
 from app.models.read_models import AccountResponse
 from ..db import Session
-from ..utils.enums import TransactionType
+from app.utils.enums import TransactionType
 
 from .customer_model import Customer
 from .limits_model import Limits
@@ -129,6 +130,20 @@ class Account(AccountBase, table=True):
                 status_code=401, detail="Not authorized to this account"
             )
         self = account
+        return self
+
+    def db_transfer_amount(
+        self, to_account_id: int, amount: float, session: Session
+    ):
+        to_account = session.get(Account, to_account_id)
+        if not to_account:
+            raise HTTPException(
+                status_code=404, detail="Transfer account not found"
+            )
+        to_account.balance += amount
+        session.add(to_account)
+        session.commit()
+        session.refresh(to_account)
         return self
 
 

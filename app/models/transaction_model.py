@@ -45,7 +45,3 @@ class Transaction(TransactionBase, table=True):
             session.delete(transaction)
         session.commit()
         return
-
-
-class TransactionWrite(TransactionBase):
-    pass

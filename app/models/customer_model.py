@@ -19,7 +19,7 @@ class CustomerWrite(CustomerBase):
 
 class Customer(CustomerBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    hashed_password: str = Field(default=None)
+    hashed_password: str | None = Field(default=None)
     accounts: list["Account"] = Relationship(back_populates="customer")
 
     def verify_password(self, password: str):
@@ -67,7 +67,7 @@ class Customer(CustomerBase, table=True):
         session.commit()
         return
 
-    def db_check_by_email(self, session: Session):
+    def db_check_if_exists(self, session: Session):
         customer = session.exec(
             select(Customer).where(Customer.email == self.email)
         ).first()

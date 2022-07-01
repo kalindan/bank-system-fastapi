@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Body, Depends, status
 from fastapi.responses import JSONResponse
 from app.auth.oauth2 import get_current_customer
 from app.db import Session, get_session
@@ -7,7 +7,6 @@ from app.models import (
     AccountWrite,
     AccountResponse,
     Limits,
-    TransactionWrite,
     Transaction,
 )
 from app.models.customer_model import Customer
@@ -80,9 +79,11 @@ def delete_account(
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_check_ownership(
-        customer_id=customer.id, session=session
-    ).db_delete(session=session)
+    (
+        Account(id=account_id)
+        .db_check_ownership(customer_id=customer.id, session=session)
+        .db_delete(session=session)
+    )
     Transaction(account_id=account_id).db_delete_all(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -93,28 +94,27 @@ def delete_account(
 @router.put("/{account_id}/withdrawal")
 def withdraw_money(
     account_id: int,
-    transaction: TransactionWrite,
+    amount: float = Body(),
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_check_ownership(
-        customer_id=customer.id, session=session
-    ).check_balance(
-        amount=transaction.amount
-    ).check_daily_withdrawals().check_amount_withdrawn(
-        amount=transaction.amount
-    ).db_update_balance(
-        session=session, amount=-transaction.amount
+    (
+        Account(id=account_id)
+        .db_check_ownership(customer_id=customer.id, session=session)
+        .check_balance(amount=amount)
+        .check_daily_withdrawals()
+        .check_amount_withdrawn(amount=amount)
+        .db_update_balance(session=session, amount=-amount)
     )
     Transaction(
         account_id=account_id,
         transaction_type=TransactionType.WITHDRAWAL,
-        amount=transaction.amount,
+        amount=amount,
     ).db_create(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
-            "message": f"Successfully withdrawn {transaction.amount} CZK from account {account_id}"
+            "message": f"Successfully withdrawn {amount} CZK from account {account_id}"
         },
     )
 
@@ -122,28 +122,50 @@ def withdraw_money(
 @router.put("/{account_id}/deposit")
 def deposit_money(
     account_id: int,
-    transaction: TransactionWrite,
+    amount: float = Body(),
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_check_ownership(
-        customer_id=customer.id, session=session
-    ).db_update_balance(session=session, amount=transaction.amount)
+    (
+        Account(id=account_id)
+        .db_check_ownership(customer_id=customer.id, session=session)
+        .db_update_balance(session=session, amount=amount)
+    )
     Transaction(
         account_id=account_id,
         transaction_type=TransactionType.DEPOSIT,
-        amount=transaction.amount,
+        amount=amount,
     ).db_create(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
-            "message": f"Successfully {transaction.amount} CZK deposited to account {account_id}"
+            "message": f"Successfully deposited {amount} CZK to account {account_id}"
         },
     )
 
 
 @router.put("/{account_id}/transfer")
 def transfer_money(
-    account_id: int, session: Session = Depends(get_session)
-):  # , account_to: Account, amount:int= Body()):
-    pass
+    account_id: int,
+    amount: float = Body(),
+    to_account_id: int = Body(),
+    customer: Customer = Depends(get_current_customer),
+    session: Session = Depends(get_session),
+):
+    (
+        Account(id=account_id)
+        .db_check_ownership(customer_id=customer.id, session=session)
+        .check_balance(amount=amount)
+        .check_daily_withdrawals()
+        .check_amount_withdrawn(amount=amount)
+        .db_transfer_amount(
+            to_account_id=to_account_id, amount=amount, session=session
+        )
+        .db_update_balance(amount=-amount, session=session)
+    )
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": f"Successfully  transferred {amount} CZK to account {to_account_id}"
+        },
+    )

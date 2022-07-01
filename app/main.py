@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.db import create_db_and_tables
 from app.routers import accounts, customers, login
 
-app = FastAPI()
+app = FastAPI(title="Bank system")
 app.include_router(login.router)
 app.include_router(customers.router)
 app.include_router(accounts.router)
@@ -16,7 +16,7 @@ def on_startup():
 
 @app.get("/")
 def index():
-    return {"message": "Welcome to k-bank system"}
+    return {"message": "Welcome to bank system"}
 
 
 # if __name__ == "__main__":
