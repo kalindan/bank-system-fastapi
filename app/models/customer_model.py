@@ -31,7 +31,7 @@ class Customer(CustomerBase, table=True):
         self.hashed_password = pwd_context.hash(password)
         return self
 
-    def get_response_model(self, status: str, message: str):
+    def get_response_model(self, status: int, message: str):
         customer_response = CustomerResponse.from_orm(self)
         customer_response.status = status
         customer_response.message = message

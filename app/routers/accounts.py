@@ -44,7 +44,7 @@ def get_account(
 ):
     account = (
         Account(id=account_id)
-        .db_read(session=session)
+        .db_check_ownership(customer_id=customer.id, session=session)
         .get_response_model(status=status.HTTP_200_OK, message=ACCOUNT_LOADED)
     )
     return account
@@ -57,8 +57,10 @@ def update_limits(
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    account = Account(id=account_id).db_update_limits(
-        session=session, limits=limits
+    account = (
+        Account(id=account_id)
+        .db_check_ownership(customer_id=customer.id, session=session)
+        .db_update_limits(session=session, limits=limits)
     )
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -76,7 +78,9 @@ def delete_account(
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_delete(session=session)
+    Account(id=account_id).db_check_ownership(
+        customer_id=customer.id, session=session
+    ).db_delete(session=session)
     Transaction(account_id=account_id).db_delete_all(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -91,7 +95,9 @@ def withdraw_money(
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_read(session=session).check_balance(
+    Account(id=account_id).db_check_ownership(
+        customer_id=customer.id, session=session
+    ).check_balance(
         amount=transaction.amount
     ).check_daily_withdrawals().check_amount_withdrawn(
         amount=transaction.amount
@@ -118,9 +124,9 @@ def deposit_money(
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
-    Account(id=account_id).db_update_balance(
-        session=session, amount=transaction.amount
-    )
+    Account(id=account_id).db_check_ownership(
+        customer_id=customer.id, session=session
+    ).db_update_balance(session=session, amount=transaction.amount)
     Transaction(
         account_id=account_id,
         transaction_type=TransactionType.DEPOSIT,

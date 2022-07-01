@@ -67,7 +67,7 @@ class Account(AccountBase, table=True):
         self.customer_id = id
         return self
 
-    def get_response_model(self, status: str, message: str):
+    def get_response_model(self, status: int, message: str):
         account_response = AccountResponse.from_orm(self)
         account_response.status = status
         account_response.message = message
@@ -118,6 +118,17 @@ class Account(AccountBase, table=True):
             raise HTTPException(status_code=404, detail="Account not found")
         session.delete(account)
         session.commit()
+        return self
+
+    def db_check_ownership(self, customer_id: int | None, session: Session):
+        account = session.get(Account, self.id)
+        if not account:
+            raise HTTPException(status_code=404, detail="Account not found")
+        if account.customer_id != customer_id:
+            raise HTTPException(
+                status_code=401, detail="Not authorized to this account"
+            )
+        self = account
         return self
 
 

@@ -9,7 +9,7 @@ from app.models.customer_model import Customer
 
 SECRET_KEY = "1431hjbnfedkf13uk13fg9043v"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 

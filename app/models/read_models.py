@@ -18,7 +18,7 @@ class AccountRead(AccountBase):
 
 
 class AccountResponse(AccountRead):
-    status: str = Field(default="")
+    status: int | None = Field(default=None)
     message: str = Field(default="")
 
 
@@ -27,6 +27,6 @@ class CustomerRead(CustomerBase):
     accounts: list["AccountRead"] = []
 
 
-class CustomerResponse(CustomerBase):
-    status: str = Field(default="")
+class CustomerResponse(CustomerRead):
+    status: int | None = Field(default=None)
     message: str = Field(default="")

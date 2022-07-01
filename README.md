@@ -24,8 +24,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 ## Bank system API endpoints
 | Endpoints                          | HTTP method      | Description                                |
 |------------------------------------|------------------|--------------------------------------------|
-| /customers                         |POST              | Register new customer                      |
-| /customers/{customer_id}           |GET, POST, DELETE | Get / Login / Delete customer              | 
+| /customers                         |POST, GET, DELETE | Register Get / Delete customer             |
 | /customers/{customer_id}/recover   |GET               | Recover password (Send to email)           |
 | /accounts                          |POST              | Register new account                       |
 | /accounts/{account_id}             |GET, DELETE       | Get account info / Delete account          |

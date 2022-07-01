@@ -27,15 +27,10 @@ def register_customer(
 
 
 @router.get("/", response_model=CustomerResponse)
-def customer_info(
-    customer: Customer = Depends(get_current_customer),
-    session: Session = Depends(get_session),
-):
-    customer.db_read_by_id(session=session).get_response_model(
+def customer_info(customer: Customer = Depends(get_current_customer)):
+    return customer.get_response_model(
         status=status.HTTP_200_OK, message=CUSTOMER_CREATED
     )
-
-    return customer
 
 
 @router.delete("/")
