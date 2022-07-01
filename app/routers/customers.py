@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from app.db import get_session, Session
 from app.models import Customer, CustomerWrite, CustomerRead, CustomerResponse
-from app.utils.messages import CUSTOMER_CREATED, CUSTOMER_LOADED
+from app.utils.enums import Messages as msg
 from app.auth.oauth2 import get_current_customer
 
 router = APIRouter(prefix="/customers", tags=["customers"])
@@ -20,7 +20,7 @@ def register_customer(
         .hash_password(customer_write.password)
         .db_create(session=session)
         .get_response_model(
-            status=status.HTTP_201_CREATED, message=CUSTOMER_CREATED
+            status=status.HTTP_201_CREATED, message=msg.CUSTOMER_CREATED
         )
     )
     return customer
@@ -29,7 +29,7 @@ def register_customer(
 @router.get("/", response_model=CustomerResponse)
 def customer_info(customer: Customer = Depends(get_current_customer)):
     return customer.get_response_model(
-        status=status.HTTP_200_OK, message=CUSTOMER_CREATED
+        status=status.HTTP_200_OK, message=msg.CUSTOMER_CREATED
     )
 
 

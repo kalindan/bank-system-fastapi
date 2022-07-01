@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlmodel import Field
 from .base_models import TransactionBase, AccountBase, CustomerBase
-from .enums import TransactionType
+from ..utils.enums import TransactionType
 
 
 class TransactionRead(TransactionBase):

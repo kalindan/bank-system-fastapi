@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from app.models.read_models import AccountResponse
 from ..db import Session
-from .enums import TransactionType
+from ..utils.enums import TransactionType
 
 from .customer_model import Customer
 from .limits_model import Limits

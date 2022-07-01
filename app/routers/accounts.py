@@ -11,8 +11,8 @@ from app.models import (
     Transaction,
 )
 from app.models.customer_model import Customer
-from app.models.transaction_model import TransactionType
-from app.utils.messages import ACCOUNT_CREATED, ACCOUNT_LOADED
+from app.utils.enums import TransactionType
+from app.utils.enums import Messages as msg
 
 router = APIRouter(prefix="/accounts", tags=["accounts"])
 
@@ -30,7 +30,7 @@ def register_account(
         .set_customer_id(id=customer.id)
         .db_create(session=session)
         .get_response_model(
-            status=status.HTTP_201_CREATED, message=ACCOUNT_CREATED
+            status=status.HTTP_201_CREATED, message=msg.ACCOUNT_CREATED
         )
     )
     return account
@@ -45,7 +45,9 @@ def get_account(
     account = (
         Account(id=account_id)
         .db_check_ownership(customer_id=customer.id, session=session)
-        .get_response_model(status=status.HTTP_200_OK, message=ACCOUNT_LOADED)
+        .get_response_model(
+            status=status.HTTP_200_OK, message=msg.ACCOUNT_LOADED
+        )
     )
     return account
 
