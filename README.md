@@ -2,11 +2,11 @@
 The goal of this project is to create REST API service mimicing simple bank system and play with / learn FastAPI framework.
 ## User requirements:
 - [X] Possibility to register customer
-- [X] Possibility to create an account(s) for given customer
-- [X] Deposit/Withdraw money
+- [X] Possibility to create account(s) for given customer
+- [X] Deposit/Withdraw money from account
 - [ ] Transfer money to another account
-- [X] Set daily withdrawal limits
-- [X] Set maximum per withdrawal limit
+- [X] Set amount of allowed daily withdrawals
+- [X] Set allowed maximum withdrawal per day
 ## Backend requirements:
 - [X] Store persistent data in database
 - [X] Authentication of customers by password flow and JWT
