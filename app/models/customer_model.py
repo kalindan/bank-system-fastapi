@@ -1,10 +1,11 @@
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, select
 from typing import TYPE_CHECKING
 from fastapi import HTTPException
-from passlib.context import CryptContext  # type:ignore
 from ..models.read_models import CustomerRead, CustomerResponse
 from ..db import Session
 from .base_models import CustomerBase
+from passlib.context import CryptContext  # type:ignore
+
 
 if TYPE_CHECKING:
     from .account_model import Account
@@ -21,8 +22,10 @@ class Customer(CustomerBase, table=True):
     hashed_password: str = Field(default=None)
     accounts: list["Account"] = Relationship(back_populates="customer")
 
-    def verify_password(self, password: str) -> bool:
-        return pwd_context.verify(password, self.hashed_password)
+    def verify_password(self, password: str):
+        if not pwd_context.verify(password, self.hashed_password):
+            raise HTTPException(status_code=401, detail="Wrong password")
+        return self
 
     def hash_password(self, password: str):
         self.hashed_password = pwd_context.hash(password)
@@ -40,8 +43,17 @@ class Customer(CustomerBase, table=True):
         session.refresh(self)
         return self
 
-    def db_read(self, session: Session):
+    def db_read_by_id(self, session: Session):
         customer = session.get(Customer, self.id)
+        if not customer:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        self = customer
+        return self
+
+    def db_read_by_email(self, session: Session):
+        customer = session.exec(
+            select(Customer).where(Customer.email == self.email)
+        ).first()
         if not customer:
             raise HTTPException(status_code=404, detail="Customer not found")
         self = customer
@@ -54,3 +66,13 @@ class Customer(CustomerBase, table=True):
         session.delete(customer)
         session.commit()
         return
+
+    def db_check_by_email(self, session: Session):
+        customer = session.exec(
+            select(Customer).where(Customer.email == self.email)
+        ).first()
+        if customer:
+            raise HTTPException(
+                status_code=404, detail="Customer already exists"
+            )
+        return self

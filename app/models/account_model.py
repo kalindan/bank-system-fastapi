@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 class Account(AccountBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     balance: float = Field(default=0.0)
-    customer_id: int = Field(default=None, foreign_key="customer.id")
+    customer_id: int | None = Field(default=None, foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="accounts")
     transactions: list["Transaction"] = Relationship(back_populates="account")
 
@@ -63,7 +63,7 @@ class Account(AccountBase, table=True):
             )
         return self
 
-    def set_customer_id(self, id: int):
+    def set_customer_id(self, id: int | None):
         self.customer_id = id
         return self
 

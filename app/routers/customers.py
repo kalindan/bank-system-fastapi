@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from app.db import get_session, Session
 from app.models import Customer, CustomerWrite, CustomerRead, CustomerResponse
 from app.utils.messages import CUSTOMER_CREATED, CUSTOMER_LOADED
+from app.auth.oauth2 import get_current_customer
 
 router = APIRouter(prefix="/customers", tags=["customers"])
 
@@ -15,6 +16,7 @@ def register_customer(
 ):
     customer = (
         Customer.from_orm(customer_write)
+        .db_check_by_email(session=session)
         .hash_password(customer_write.password)
         .db_create(session=session)
         .get_response_model(
@@ -24,25 +26,25 @@ def register_customer(
     return customer
 
 
-@router.get("/{customer_id}", response_model=CustomerResponse)
-def customer_info(customer_id: int, session: Session = Depends(get_session)):
-    customer = (
-        Customer(id=customer_id)
-        .db_read(session=session)
-        .get_response_model(status=status.HTTP_200_OK, message=CUSTOMER_CREATED)
+@router.get("/", response_model=CustomerResponse)
+def customer_info(
+    customer: Customer = Depends(get_current_customer),
+    session: Session = Depends(get_session),
+):
+    customer.db_read_by_id(session=session).get_response_model(
+        status=status.HTTP_200_OK, message=CUSTOMER_CREATED
     )
+
     return customer
 
 
-@router.post("/{customer_id}", response_model=CustomerRead)
-def login_customer(customer_id: int, session: Session = Depends(get_session)):
-    pass
-
-
-@router.delete("/{customer_id}")
-def delete_customer(customer_id: int, session: Session = Depends(get_session)):
-    Customer(id=customer_id).db_delete(session=session)
+@router.delete("/")
+def delete_customer(
+    customer: Customer = Depends(get_current_customer),
+    session: Session = Depends(get_session),
+):
+    customer.db_delete(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content={"message": f"Customer {customer_id} successfully deleted"},
+        content={"message": f"Customer {customer.id} successfully deleted"},
     )
