@@ -5429,3 +5429,4 @@ app/models/__pycache__/transaction.cpython-310.pyc
 app/utils/__pycache__/__init__.cpython-310.pyc
 app/utils/__pycache__/transaction_checks.cpython-310.pyc
 app/utils/__pycache__/utils.cpython-310.pyc
+.coverage

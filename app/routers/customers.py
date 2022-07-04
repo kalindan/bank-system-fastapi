@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from app.db import get_session, Session
 from app.models import Customer, CustomerWrite, CustomerRead, CustomerResponse
@@ -26,18 +26,31 @@ def register_customer(
     return customer
 
 
-@router.get("/", response_model=CustomerResponse)
-def customer_info(customer: Customer = Depends(get_current_customer)):
+@router.get("/{customer_id}", response_model=CustomerResponse)
+def customer_info(
+    customer_id: int, customer: Customer = Depends(get_current_customer)
+):
+    if customer_id != customer.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to view this customer profile",
+        )
     return customer.get_response_model(
         status=status.HTTP_200_OK, message=msg.CUSTOMER_CREATED
     )
 
 
-@router.delete("/")
+@router.delete("/{customer_id}")
 def delete_customer(
+    customer_id: int,
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
+    if customer_id != customer.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to delete this customer profile",
+        )
     customer.db_delete(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,

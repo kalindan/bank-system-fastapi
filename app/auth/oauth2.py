@@ -1,13 +1,14 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
+from decouple import config  # type:ignore
 from jose import JWTError, jwt  # type:ignore
 from ..db import Session, get_session
 
 from app.models.customer_model import Customer
 
 
-SECRET_KEY = "1431hjbnfedkf13uk13fg9043v"
+SECRET_KEY = config("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1
 

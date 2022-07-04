@@ -8,7 +8,6 @@ from app.models.read_models import AccountResponse
 from ..db import Session
 from app.utils.enums import TransactionType
 
-from .customer_model import Customer
 from .limits_model import Limits
 from .base_models import AccountBase
 
@@ -75,9 +74,6 @@ class Account(AccountBase, table=True):
         return account_response
 
     def db_create(self, session: Session):
-        customer = session.get(Customer, self.customer_id)
-        if not customer:
-            raise HTTPException(status_code=404, detail="Customer not found")
         session.add(self)
         session.commit()
         session.refresh(self)
