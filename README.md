@@ -14,7 +14,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - [X] Endpoints secured by JWT
 - [X] Validation of limits
 - [X] Log all account transactions
-- [ ] Test suite
+- [ ] Test suite 
 ## Used technologies:
 - Python
 - FastAPI
