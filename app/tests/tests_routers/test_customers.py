@@ -1,11 +1,11 @@
 import pytest
 from requests import Response  # type:ignore
 from fastapi.testclient import TestClient
-from app.tests.conftest import post_customer
+from app.tests.conftest import register_customer
 
 
 def test_register_customer(client: TestClient):
-    response = post_customer(
+    response = register_customer(
         name="Alfons",
         email="alfons@email.cz",
         password="1234567891",
@@ -18,13 +18,13 @@ def test_register_customer(client: TestClient):
 
 
 def test_register_existing_customer(client: TestClient):
-    post_customer(
+    register_customer(
         name="Alfons",
         email="alfons@email.cz",
         password="1234567891",
         client=client,
     )
-    response = post_customer(
+    response = register_customer(
         name="Alfons",
         email="alfons@email.cz",
         password="1234567891",

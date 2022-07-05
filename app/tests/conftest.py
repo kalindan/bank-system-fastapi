@@ -31,18 +31,7 @@ def client_fixture(session: Session):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture(autouse=True)
-def create_db_accounts(session: Session):
-    [
-        Account(
-            id=id, balance=500, daily_limit=200, num_of_withdrawals=10
-        ).db_create(session=session)
-        for id in range(2, 10)
-    ]
-    yield
-
-
-def post_customer(name: str, email: str, password: str, client: TestClient):
+def register_customer(name: str, email: str, password: str, client: TestClient):
     return client.post(
         url="/customers/",
         json={
@@ -55,7 +44,7 @@ def post_customer(name: str, email: str, password: str, client: TestClient):
 
 @pytest.fixture(name="jwt_token")
 def get_jwt_token(client: TestClient):
-    post_customer(
+    register_customer(
         name="Alfons",
         email="alfons@email.cz",
         password="1234567891",
@@ -66,3 +55,11 @@ def get_jwt_token(client: TestClient):
         headers={"Content-Type": "application/x-www-form-urlencoded"},
         data={"username": "alfons@email.cz", "password": "1234567891"},
     ).json()["access_token"]
+
+
+def register_account(jwt_token: str, client: TestClient):
+    return client.post(
+        url="/accounts/",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        json={"daily_limit": "500", "num_of_withdrawals": "5"},
+    )

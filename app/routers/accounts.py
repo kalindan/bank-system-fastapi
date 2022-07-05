@@ -1,3 +1,4 @@
+from http.client import HTTPException
 from fastapi import APIRouter, Body, Depends, status
 from fastapi.responses import JSONResponse
 from app.auth.oauth2 import get_current_customer
@@ -122,7 +123,7 @@ def withdraw_money(
 @router.put("/{account_id}/deposit")
 def deposit_money(
     account_id: int,
-    amount: float = Body(),
+    amount: float = Body(gt=0),
     customer: Customer = Depends(get_current_customer),
     session: Session = Depends(get_session),
 ):
