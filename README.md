@@ -29,7 +29,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 | /customers/{customer_id}/recover   |GET               | Recover password (Send to email)           |
 | /accounts                          |POST              | Register new account                       |
 | /accounts/{account_id}             |GET, DELETE       | Get account info / Delete account          |
-| /accounts/{account_id}/limits      |POST              | Set account daily / max amount limits      |
+| /accounts/{account_id}/limits      |PUT               | Set account daily / max amount limits      |
 | /accounts/{account_id}/transfer    |PUT               | Transfer money to different account        |
 | /accounts/{account_id}/withdrawal  |PUT               | Withdraw money from account                |
 | /accounts/{account_id}/deposit     |PUT               | Deposit money to account                   |
