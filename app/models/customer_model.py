@@ -73,6 +73,6 @@ class Customer(CustomerBase, table=True):
         ).first()
         if customer:
             raise HTTPException(
-                status_code=404, detail="Customer already exists"
+                status_code=404, detail="Email already registered"
             )
         return self
