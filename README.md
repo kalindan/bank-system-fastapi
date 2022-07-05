@@ -1,4 +1,4 @@
-# Bank system ![example workflow](https://github.com/kalindan/bank-system-fastpi/actions/workflows/python-app.yml/badge.svg)
+# Bank system (https://github.com/kalindan/bank-system-fastpi/actions/workflows/python-app.yml/badge.svg)
 The goal of this project is to create REST API service mimicing simple bank system and play with / learn FastAPI framework.
 ## User requirements:
 - [X] Possibility to register customer
