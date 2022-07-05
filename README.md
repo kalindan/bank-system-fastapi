@@ -10,7 +10,8 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - [ ] Recover forgotten password by email
 ## Backend requirements:
 - [X] Store persistent data in database
-- [X] Authentication of customers by password flow and JWT
+- [X] Authentication of customers by password flow
+- [X] Endpoints secured by JWT
 - [X] Validation of limits
 - [X] Log all account transactions
 - [ ] Test suite
