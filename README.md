@@ -1,5 +1,4 @@
 # Bank system
-![example workflow](https://github.com/kalindan/bank-system-fastpi/actions/workflows/python-app.yml/badge.svg)
 The goal of this project is to create REST API service mimicing simple bank system and play with / learn FastAPI framework.
 ## User requirements:
 - [X] Possibility to register customer
@@ -15,7 +14,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - [X] Endpoints secured by JWT
 - [X] Validation of limits
 - [X] Log all account transactions
-- [X] Test suite
+- [X] Test suite ![example workflow](https://github.com/kalindan/bank-system-fastapi/actions/workflows/python-app.yml/badge.svg)
 ## Used technologies:
 - Python
 - FastAPI
