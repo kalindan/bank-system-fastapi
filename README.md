@@ -27,7 +27,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - FastAPI
 - SQLModel
 - Pytest
-- PostgreSQL (Not implemented yet, locally running on SQLite)
+- PostgreSQL (for test suite SQLite used)
 
 ## Bank system API endpoints
 | Endpoints                          | HTTP method | Description                         |
