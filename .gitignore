@@ -5453,3 +5453,9 @@ tests/test_models/__pycache__/test_account_model.cpython-310-pytest-7.1.2.pyc
 tests/__pycache__/__init__.cpython-310.pyc
 tests/__pycache__/conftest.cpython-310-pytest-7.1.2.pyc
 .env
+.vscode/settings.json
+app/config/__pycache__/config.cpython-310.pyc
+tests/tests_routers/__pycache__/test_accounts.cpython-310-pytest-7.1.2.pyc
+app/config/__pycache__/config.cpython-310.pyc
+app/config/__pycache__/__init__.cpython-310.pyc
+app/config/__pycache__/config.cpython-310.pyc
