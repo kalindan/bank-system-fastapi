@@ -1,9 +1,8 @@
 from sqlmodel import SQLModel, create_engine, Session
-from decouple import config  # type:ignore
+from app.config.config import config
 
-DB_URL = config("DB_URL")
 connect_args = {"check_same_thread": False}
-engine = create_engine(DB_URL, connect_args=connect_args)
+engine = create_engine(config().db_url, connect_args=connect_args)
 
 
 def create_db_and_tables():
