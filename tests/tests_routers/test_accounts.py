@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-from requests import Response  # type:ignore
 from tests.conftest import register_account
 
 
@@ -62,6 +61,17 @@ def test_update_limits(jwt_token: str, client: TestClient):
     assert data["message"] == "Account 1 limits successfully updated"
 
 
+def test_update_limits_invalid_value(jwt_token: str, client: TestClient):
+    register_account(jwt_token=jwt_token, client=client)
+    response = client.patch(
+        url="/accounts/1/limits",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        json={"daily_limit": "-750", "num_of_withdrawals": "45"},
+    )
+    data = response.json()
+    assert response.status_code == 422
+
+
 def test_delete_account(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
     response = client.delete(
@@ -87,6 +97,17 @@ def test_deposit_money(jwt_token: str, client: TestClient):
     data = response.json()
     assert response.status_code == 200
     assert data["message"] == "Successfully deposited 1022.0 CZK to account 1"
+
+
+def test_deposit_invalid_amount(jwt_token: str, client: TestClient):
+    register_account(jwt_token=jwt_token, client=client)
+    response = client.patch(
+        url="/accounts/1/deposit",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        data="-10",
+    )
+    data = response.json()
+    assert response.status_code == 422
 
 
 def test_withdraw_money(jwt_token: str, client: TestClient):
