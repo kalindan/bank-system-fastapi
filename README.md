@@ -20,7 +20,7 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - [X] Log all account transactions
 - [X] Test suite ![example workflow](https://github.com/kalindan/bank-system-fastapi/actions/workflows/python-app.yml/badge.svg)
 - [X] Run on Docker
-- [ ] Logging
+- [ ] Logging 
 - [ ] Caching transactions read from db
 ## Used technologies:
 - Python
