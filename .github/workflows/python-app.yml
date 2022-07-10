@@ -10,7 +10,8 @@ on:
 
 permissions:
   contents: read
-
+env:
+  ENV: development
 jobs:
   build:
 
