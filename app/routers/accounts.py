@@ -52,7 +52,7 @@ def get_account(
     return account
 
 
-@router.put("/{account_id}/limits")
+@router.patch("/{account_id}/limits")
 def update_limits(
     account_id: int,
     limits: Limits,
@@ -92,7 +92,7 @@ def delete_account(
     )
 
 
-@router.put("/{account_id}/withdrawal")
+@router.patch("/{account_id}/withdrawal")
 def withdraw_money(
     account_id: int,
     amount: float = Body(),
@@ -120,7 +120,7 @@ def withdraw_money(
     )
 
 
-@router.put("/{account_id}/deposit")
+@router.patch("/{account_id}/deposit")
 def deposit_money(
     account_id: int,
     amount: float = Body(gt=0),
@@ -145,7 +145,7 @@ def deposit_money(
     )
 
 
-@router.put("/{account_id}/transfer")
+@router.patch("/{account_id}/transfer")
 def transfer_money(
     account_id: int,
     amount: float = Body(),

@@ -50,7 +50,7 @@ def test_get_account_no_login(jwt_token: str, client: TestClient):
 
 def test_update_limits(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
-    response = client.put(
+    response = client.patch(
         url="/accounts/1/limits",
         headers={"Authorization": f"Bearer {jwt_token}"},
         json={"daily_limit": "750", "num_of_withdrawals": "45"},
@@ -79,7 +79,7 @@ def test_delete_account(jwt_token: str, client: TestClient):
 
 def test_deposit_money(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
-    response = client.put(
+    response = client.patch(
         url="/accounts/1/deposit",
         headers={"Authorization": f"Bearer {jwt_token}"},
         data="1022",
@@ -91,12 +91,12 @@ def test_deposit_money(jwt_token: str, client: TestClient):
 
 def test_withdraw_money(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
-    client.put(
+    client.patch(
         url="/accounts/1/deposit",
         headers={"Authorization": f"Bearer {jwt_token}"},
         data="1000",
     )
-    response = client.put(
+    response = client.patch(
         url="/accounts/1/withdrawal",
         headers={"Authorization": f"Bearer {jwt_token}"},
         data="250",
@@ -109,12 +109,12 @@ def test_withdraw_money(jwt_token: str, client: TestClient):
 def test_transfer_money(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
     register_account(jwt_token=jwt_token, client=client)
-    client.put(
+    client.patch(
         url="/accounts/1/deposit",
         headers={"Authorization": f"Bearer {jwt_token}"},
         data="1000",
     )
-    response = client.put(
+    response = client.patch(
         url="/accounts/1/transfer",
         headers={"Authorization": f"Bearer {jwt_token}"},
         json={"to_account_id": "2", "amount": "250"},
