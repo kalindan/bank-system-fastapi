@@ -23,3 +23,6 @@ def config() -> Config:
     if os.environ.get("ENV", "production") == "development":
         return DevConfig()
     return ProdConfig()
+
+
+active_config = config()

@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
-from app.config.config import config
+from app.config.config import active_config
 from jose import JWTError, jwt  # type:ignore
 from ..db import Session, get_session
 from app.models.customer_model import Customer
@@ -10,7 +10,6 @@ from app.models.customer_model import Customer
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
-active_config = config()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
