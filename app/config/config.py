@@ -1,6 +1,5 @@
 import os
 from functools import lru_cache
-
 from pydantic import BaseModel
 
 
@@ -20,7 +19,7 @@ class DevConfig(Config):
 
 
 @lru_cache()
-def config() -> ProdConfig | DevConfig:
-    if os.environ.get("ENV", "[production") == "development":
+def config() -> Config:
+    if os.environ.get("ENV", "production") == "development":
         return DevConfig()
     return ProdConfig()
