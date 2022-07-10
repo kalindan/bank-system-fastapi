@@ -127,6 +127,45 @@ def test_withdraw_money(jwt_token: str, client: TestClient):
     assert data["message"] == "Successfully withdrawn 250.0 CZK from account 1"
 
 
+def test_withdraw_money_over_max(jwt_token: str, client: TestClient):
+    register_account(jwt_token=jwt_token, client=client)
+    client.patch(
+        url="/accounts/1/deposit",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        data="1000",
+    )
+    response = client.patch(
+        url="/accounts/1/withdrawal",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        data="1250",
+    )
+    data = response.json()
+    assert response.status_code == 406
+    assert data["detail"] == "Not sufficient balance"
+
+
+def test_withdraw_money_over_allowed_withdrawals(
+    jwt_token: str, client: TestClient
+):
+    register_account(jwt_token=jwt_token, client=client)
+    client.patch(
+        url="/accounts/1/deposit",
+        headers={"Authorization": f"Bearer {jwt_token}"},
+        data="1000",
+    )
+    responses = [
+        client.patch(
+            url="/accounts/1/withdrawal",
+            headers={"Authorization": f"Bearer {jwt_token}"},
+            data="10",
+        )
+        for _ in range(6)
+    ]
+    data = responses[5].json()
+    assert responses[5].status_code == 406
+    assert data["detail"] == "No more allowed withdrawals today"
+
+
 def test_transfer_money(jwt_token: str, client: TestClient):
     register_account(jwt_token=jwt_token, client=client)
     register_account(jwt_token=jwt_token, client=client)
