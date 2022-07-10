@@ -10,11 +10,18 @@ The goal of this project is to create REST API service mimicing simple bank syst
 - [ ] Recover forgotten password by email
 ## Backend requirements:
 - [X] Store persistent data in database
+- [ ] New customer verification by email
 - [X] Authentication of customers by password flow
 - [X] Endpoints secured by JWT
+  - [X] Generate access token
+  - [ ] Generate refresh token
+  - [ ] Black listing access token
 - [X] Validation of limits
 - [X] Log all account transactions
 - [X] Test suite ![example workflow](https://github.com/kalindan/bank-system-fastapi/actions/workflows/python-app.yml/badge.svg)
+- [X] Run on Docker
+- [ ] Logging
+- [ ] Caching transactions read from db
 ## Used technologies:
 - Python
 - FastAPI
@@ -35,5 +42,4 @@ The goal of this project is to create REST API service mimicing simple bank syst
 | /accounts/{account_id}/transfer    |PUT          | Transfer money to different account |
 | /accounts/{account_id}/withdrawal  |PUT          | Withdraw money from account         |
 | /accounts/{account_id}/deposit     |PUT          | Deposit money to account            |
-     
 
