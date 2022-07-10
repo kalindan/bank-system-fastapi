@@ -36,7 +36,7 @@ def customer_info(
             detail="Not authorized to view this customer profile",
         )
     return customer.get_response_model(
-        status=status.HTTP_200_OK, message=msg.CUSTOMER_CREATED
+        status=status.HTTP_200_OK, message=msg.CUSTOMER_LOADED
     )
 
 

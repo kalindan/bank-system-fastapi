@@ -164,6 +164,11 @@ def transfer_money(
         )
         .db_update_balance(amount=-amount, session=session)
     )
+    Transaction(
+        account_id=account_id,
+        transaction_type=TransactionType.TRANSFER,
+        amount=amount,
+    ).db_create(session=session)
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
