@@ -5446,3 +5446,9 @@ app/tests/tests_routers/__pycache__/test_customers.cpython-310-pytest-7.1.2.pyc
 app/utils/__pycache__/enums.cpython-310.pyc
 app/models/__pycache__/base_models.cpython-310.pyc
 
+tests/tests_routers/__pycache__/__init__.cpython-310.pyc
+tests/tests_routers/__pycache__/test_customers.cpython-310-pytest-7.1.2.pyc
+tests/test_models/__pycache__/__init__.cpython-310.pyc
+tests/test_models/__pycache__/test_account_model.cpython-310-pytest-7.1.2.pyc
+tests/__pycache__/__init__.cpython-310.pyc
+tests/__pycache__/conftest.cpython-310-pytest-7.1.2.pyc

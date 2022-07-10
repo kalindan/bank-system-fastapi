@@ -1,7 +1,7 @@
 import pytest
 from requests import Response  # type:ignore
 from fastapi.testclient import TestClient
-from app.tests.conftest import register_customer
+from tests.conftest import register_customer
 
 
 def test_register_customer(client: TestClient):

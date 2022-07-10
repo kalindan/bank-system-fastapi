@@ -5,7 +5,7 @@ from app.models.transaction_model import Transaction
 import pytest
 from fastapi.testclient import TestClient
 from app.utils.enums import TransactionType
-from app.tests.conftest import register_account
+from tests.conftest import register_account
 
 
 def test_check_balance_exception(

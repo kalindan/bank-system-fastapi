@@ -1,6 +1,6 @@
 import pytest
 from app.models.account_model import Account
-from ..db.database import connect_args, get_session
+from app.db.database import connect_args, get_session
 from sqlmodel import SQLModel, Session, create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
