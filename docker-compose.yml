@@ -3,9 +3,23 @@ services:
     build: .
     container_name: bank-system-compose
     environment:
-      ENV: development
-    command: uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
+      ENV: production
+      DB_URL: postgresql://postgres:postgrespw@postgres:5432/bank_system_db
+      SECRET_KEY: kajsdfk13dkmn229x3jj3fv0j2
+    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done;  uvicorn app.main:app --host 0.0.0.0 --port 80 --reload'
     ports:
       - 8080:80
     volumes:
       - .:/code
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql
+volumes:
+  data:

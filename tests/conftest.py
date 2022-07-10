@@ -1,6 +1,6 @@
 import pytest
 from app.models.account_model import Account
-from app.db.database import connect_args, get_session
+from app.db.database import get_session
 from sqlmodel import SQLModel, Session, create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
@@ -12,7 +12,6 @@ from sqlmodel.pool import StaticPool
 def session_fixture():
     engine = create_engine(
         "sqlite://",
-        connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
     SQLModel.metadata.create_all(engine)
