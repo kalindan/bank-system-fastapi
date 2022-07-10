@@ -17,7 +17,3 @@ def on_startup():
 @app.get("/")
 def index():
     return {"message": "Welcome to bank system"}
-
-
-# if __name__ == "__main__":
-#     uvicorn.run("main:app",reload=True)
