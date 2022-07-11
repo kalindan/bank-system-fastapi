@@ -10,7 +10,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - .:/code
+      - .:/app/code
     depends_on:
       - postgres
   postgres:

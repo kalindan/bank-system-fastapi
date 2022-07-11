@@ -1,1 +1,5 @@
 app/tests
+app/.coverage
+app/database.db
+app/__pycache__
+app/.pytest_cache
