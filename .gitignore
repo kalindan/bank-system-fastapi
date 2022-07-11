@@ -5459,3 +5459,4 @@ tests/tests_routers/__pycache__/test_accounts.cpython-310-pytest-7.1.2.pyc
 app/config/__pycache__/config.cpython-310.pyc
 app/config/__pycache__/__init__.cpython-310.pyc
 app/config/__pycache__/config.cpython-310.pyc
+app/tests/tests_routers/__pycache__/test_accounts.cpython-310-pytest-7.1.2.pyc

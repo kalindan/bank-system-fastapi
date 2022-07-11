@@ -1,11 +1,11 @@
-from fastapi import Depends, HTTPException
-from sqlmodel import Session
+import pytest
 from app.models import Account
 from app.models.transaction_model import Transaction
-import pytest
-from fastapi.testclient import TestClient
+from app.tests.conftest import register_account
 from app.utils.enums import TransactionType
-from tests.conftest import register_account
+from fastapi import Depends, HTTPException
+from fastapi.testclient import TestClient
+from sqlmodel import Session
 
 
 def test_check_balance_exception(

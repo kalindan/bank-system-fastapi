@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from tests.conftest import register_account
+from app.tests.conftest import register_account
 
 
 def test_register_account(jwt_token: str, client: TestClient):
