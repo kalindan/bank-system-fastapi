@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
-from app.config.config import active_config
+from app.config.config import config
 from jose import JWTError, jwt  # type:ignore
 from ..db import Session, get_session
 from app.models.customer_model import Customer
@@ -18,7 +18,7 @@ def generate_token(customer_id: int):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, active_config.secret_key, algorithm=ALGORITHM
+        to_encode, config.secret_key, algorithm=ALGORITHM
     )
     return encoded_jwt
 
@@ -28,7 +28,7 @@ def get_current_customer(
 ):
     try:
         payload = jwt.decode(
-            token, active_config.secret_key, algorithms=[ALGORITHM]
+            token, config.secret_key, algorithms=[ALGORITHM]
         )
         customer_id: int = payload.get("id")
         customer = Customer(id=customer_id).db_read_by_id(session=session)
